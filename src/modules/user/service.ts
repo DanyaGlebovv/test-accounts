@@ -1,6 +1,11 @@
 import { FastifyRequest } from 'fastify';
 import { UserRepository, UserEntity } from '../../db';
 
+export const getUsers = async () => {
+  const list = await UserRepository.findOneBy({});
+  return { list };
+};
+
 export const getUser = async (req: FastifyRequest<{ Params: { userId: string } }>) => {
   const { userId } = req.params;
   const user = await UserRepository.findOneBy({ id: Number(userId) });

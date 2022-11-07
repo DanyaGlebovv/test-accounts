@@ -1,0 +1,10 @@
+{
+  "port": 8080,
+  "db": {
+    "host": "127.0.0.1",
+    "port": 54312,
+    "username": "postgres",
+    "password": "root",
+    "database": "pg_p1_plus_tests"
+  }
+}
