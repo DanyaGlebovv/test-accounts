@@ -6,5 +6,8 @@
     "username": "postgres",
     "password": "postgres",
     "database": "pone_plus"
+  },
+  "auth": {
+    "secret": "*"
   }
 }

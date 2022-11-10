@@ -1,17 +1,29 @@
 import { UserEntity } from '../entities';
-import { MigrationInterface, QueryRunner } from 'typeorm';
+import { In, MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateUser1667758956851 implements MigrationInterface {
-  user = {
-    id: 1,
-    firstName: 'TestFirstName',
-    lastName: 'TestLastName',
-    title: 'test_user',
-  };
+  users = [
+    {
+      id: 1,
+      pOnePersonId: 1,
+      firstName: 'TestFirstName',
+      lastName: 'TestLastName',
+      title: 'test_user',
+      email: 'testuser@test.com',
+    },
+    {
+      id: 2,
+      pOnePersonId: 2,
+      firstName: 'TestFirstName2',
+      lastName: 'TestLastName2',
+      title: 'test_use2r',
+      email: 'testuser2@test.com',
+    },
+  ];
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.startTransaction();
     try {
-      queryRunner.manager.insert(UserEntity, this.user);
+      queryRunner.manager.insert(UserEntity, this.users);
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
@@ -21,7 +33,7 @@ export class CreateUser1667758956851 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.startTransaction();
     try {
-      queryRunner.manager.delete(UserEntity, { id: this.user.id });
+      queryRunner.manager.delete(UserEntity, { id: In(this.users.map(({ id }) => id)) });
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
