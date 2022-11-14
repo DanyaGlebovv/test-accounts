@@ -1,7 +1,7 @@
 import { CustomFastifyInstance } from 'models';
 import { signIn, signUp } from '../../../modules';
 
-export default async function authorisation(fastify: CustomFastifyInstance) {
+export default async function authorization(fastify: CustomFastifyInstance) {
   fastify.route({
     method: 'GET',
     url: '/sign-in',

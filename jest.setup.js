@@ -18,7 +18,6 @@ module.exports = async () => {
       cwd: path.join(__dirname),
     },
   )
-
     try {
       execSync('npm run test:db:init')
     } catch (e) {

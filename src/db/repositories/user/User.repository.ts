@@ -1,6 +1,6 @@
+import { Not } from 'typeorm';
 import { UserEntity } from '../../entities';
 import { AppDataSource } from '../../data-source';
-import { Not, Raw } from 'typeorm';
 
 export const UserRepository = AppDataSource.getRepository(UserEntity).extend({
   findOneWithActiveSubscriptions(pOnePersonId: number) {
@@ -8,13 +8,10 @@ export const UserRepository = AppDataSource.getRepository(UserEntity).extend({
       where: {
         pOnePersonId,
         optOutAt: null,
-        subscriptions: {
-          expireAt: Raw((alias) => `${alias} > NOW()`),
-        },
       },
       relations: {
         subscriptions: {
-          expireAt: true,
+          subscription: true,
         },
       },
     });

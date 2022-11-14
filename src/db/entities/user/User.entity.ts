@@ -39,7 +39,7 @@ export class UserEntity {
   deletedAt?: string;
 
   @OneToMany(() => SubscriptionUserEntity, (subscription) => subscription.user)
-  subscriptions: SubscriptionUserEntity[];
+  subscriptions?: SubscriptionUserEntity[];
 
   constructor(data: UserEntity) {
     if (data) {

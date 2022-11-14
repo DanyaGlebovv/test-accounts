@@ -7,14 +7,6 @@ export class SubscriptionUserEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => UserEntity)
-  @JoinColumn()
-  user: UserEntity;
-
-  @ManyToOne(() => SubscriptionEntity)
-  @JoinColumn()
-  subscription: SubscriptionEntity;
-
   @Column({ nullable: true })
   expireAt?: string;
 
@@ -26,4 +18,12 @@ export class SubscriptionUserEntity {
 
   @Column({ nullable: true })
   deletedAt?: string;
+
+  @ManyToOne(() => UserEntity)
+  @JoinColumn()
+  user: UserEntity;
+
+  @ManyToOne(() => SubscriptionEntity)
+  @JoinColumn()
+  subscription: SubscriptionEntity;
 }

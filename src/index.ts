@@ -11,7 +11,7 @@ import 'reflect-metadata';
 export const init = async (opts?) => {
   const app = fastify();
 
-  await AppDataSource.initialize();
+  const db = await AppDataSource.initialize();
   console.log('Database connect success');
 
   app.register(AutoLoad, {
@@ -29,11 +29,10 @@ export const init = async (opts?) => {
         reply.status(401).send('Unauthorized');
       }
       const user = await tokenService.decodeToken(request.headers.authorization);
-      console.log(user);
       request.user = user as UserDataJWT;
     } catch (err) {
       reply.send(err);
     }
   });
-  return app;
+  return { app, db };
 };

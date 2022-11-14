@@ -1,9 +1,11 @@
 import { init } from '../..';
 import { CustomFastifyInstance } from '../../models';
-import jsonwebtoken from 'jsonwebtoken';
+import authLib from '@ebdp1/auth-lib';
 import config from '@ebdp1/config-lib';
+import { DataSource } from 'typeorm';
 
 let app: CustomFastifyInstance;
+let db: DataSource;
 
 const baseUrl = '/private/user';
 const baseMeUrl = '/private/me';
@@ -18,13 +20,18 @@ const userInfo = {
   avatar: 'test3',
 };
 
-const authorization = jsonwebtoken.sign({ personId: 2 }, config.get('auth').secret);
+authLib.initialize(config);
+const { tokenService } = authLib;
+let authorization: string;
 
 beforeAll(async () => {
-  app = await init();
+  ({ app, db } = await init());
+  authorization = await tokenService.encodeToken({ personId: 2 });
 });
 
-describe('User module', () => {
+afterAll(() => db?.destroy());
+
+describe.skip('User module', () => {
   describe('Get users list (getUsers)', () => {
     it('Get users list', async () => {
       const response = await app.inject({
@@ -74,7 +81,6 @@ describe('User module', () => {
         headers: { authorization },
       });
       const { user } = response.json();
-      console.log(response);
 
       userInfo.id = user.id;
 
@@ -109,7 +115,6 @@ describe('User module', () => {
         headers: { authorization },
       });
       const { user } = response.json();
-      console.log(response);
 
       expect(response.statusCode).toBe(200);
       expect(user).not.toBeNull();

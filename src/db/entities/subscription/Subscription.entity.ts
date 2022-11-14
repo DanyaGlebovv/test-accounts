@@ -10,7 +10,7 @@ export class SubscriptionEntity {
   name: string;
 
   @Column()
-  price: string;
+  price: number;
 
   @Column({ nullable: true })
   description?: string;
@@ -25,5 +25,17 @@ export class SubscriptionEntity {
   deletedAt?: string;
 
   @OneToMany(() => SubscriptionUserEntity, (subscriptionUser) => subscriptionUser.subscription)
-  subscriptedUsers: SubscriptionUserEntity[];
+  subscriptedUsers?: SubscriptionUserEntity[];
+
+  constructor(data: SubscriptionEntity) {
+    if (data) {
+      this.id = data.id;
+      this.name = data.name;
+      this.price = data.price;
+      this.description = data.description;
+      this.createdAt = data.createdAt;
+      this.updatedAt = data.updatedAt;
+      this.deletedAt = data.deletedAt;
+    }
+  }
 }

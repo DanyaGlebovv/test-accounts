@@ -1,5 +1,6 @@
-import { UserEntity } from '../entities';
 import { In, MigrationInterface, QueryRunner } from 'typeorm';
+import { addDays } from 'date-fns';
+import { UserEntity, SubscriptionUserEntity, SubscriptionEntity } from '../entities';
 
 export class CreateUser1667758956851 implements MigrationInterface {
   users = [
@@ -20,10 +21,27 @@ export class CreateUser1667758956851 implements MigrationInterface {
       email: 'testuser2@test.com',
     },
   ];
+  subscriptions = [
+    {
+      id: 1,
+      name: 'TestSubscription',
+      price: 10,
+    },
+  ];
+  subscriptionUsers = [
+    {
+      id: 1,
+      user: new UserEntity(this.users[0]),
+      subscription: new SubscriptionEntity(this.subscriptions[0]),
+      expireAt: addDays(new Date(), 30).toUTCString(),
+    },
+  ];
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.startTransaction();
     try {
       queryRunner.manager.insert(UserEntity, this.users);
+      queryRunner.manager.insert(SubscriptionEntity, this.subscriptions);
+      queryRunner.manager.insert(SubscriptionUserEntity, this.subscriptionUsers);
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();
@@ -34,6 +52,8 @@ export class CreateUser1667758956851 implements MigrationInterface {
     await queryRunner.startTransaction();
     try {
       queryRunner.manager.delete(UserEntity, { id: In(this.users.map(({ id }) => id)) });
+      queryRunner.manager.delete(SubscriptionEntity, { id: In(this.subscriptions.map(({ id }) => id)) });
+      queryRunner.manager.delete(SubscriptionUserEntity, { id: In(this.subscriptionUsers.map(({ id }) => id)) });
       await queryRunner.commitTransaction();
     } catch (err) {
       await queryRunner.rollbackTransaction();

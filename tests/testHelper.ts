@@ -15,7 +15,6 @@ export class TestHelper {
 
   private dbConnect!: DataSource;
   async setupTestDB() {
-    console.log('asdasdasdads', this.dbConnect);
     this.dbConnect = await AppDataSource.initialize();
   }
 
